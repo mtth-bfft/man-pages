@@ -109,9 +109,13 @@ is the network port in host endianness.
 It should be noted that port 0 passed to
 .BR bind (2)
 will bind to an available port from the ephemeral port range.
-This can be configured in the
+The range is configured globally in the
 .I /proc/sys/net/ipv4/ip_local_port_range
-sysctl (also used for IPv6).
+sysctl (also used for IPv6),
+and can be further restricted per-socket using
+.BR setsockopt (2)
+with
+.BR IP_LOCAL_PORT_RANGE (2const).
 .IP
 A Landlock rule with port 0
 and the
