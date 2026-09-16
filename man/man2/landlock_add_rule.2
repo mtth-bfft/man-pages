@@ -82,7 +82,7 @@ just a file.
 .TP
 .BR LANDLOCK_RULE_NET_PORT "  (since Landlock ABI version 4)"
 For these rules,
-the object is a TCP port,
+the object is a TCP or UDP port,
 and the related actions are defined with
 .IR "network access rights" .
 .IP
@@ -120,8 +120,14 @@ with
 A Landlock rule with port 0
 and the
 .B LANDLOCK_ACCESS_NET_BIND_TCP
-right means that requesting to bind on port 0 is allowed
-and it will automatically translate to binding on the related port range.
+or
+.B LANDLOCK_ACCESS_NET_BIND_UDP
+right means that requesting to bind on port 0
+(explicitly, or implicitly
+by e.g.\& sending a datagram on an unbound UDP socket)
+is allowed
+and it will automatically translate to
+binding on a kernel-assigned ephemeral port.
 .P
 .I flags
 must be 0.
@@ -141,7 +147,8 @@ can fail for the following reasons:
 .I rule_type
 is
 .BR LANDLOCK_RULE_NET_PORT ,
-but TCP is not supported by the running kernel.
+but the kernel was built without
+.BR CONFIG_INET .
 .TP
 .B EBADF
 .I ruleset_fd
