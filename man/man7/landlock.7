@@ -276,6 +276,24 @@ Bind a TCP socket to a local port.
 .TP
 .BR LANDLOCK_ACCESS_NET_CONNECT_TCP "  (since Landlock ABI version 4)"
 Connect an active TCP socket to a remote port.
+.P
+Note on
+.BR AF_UNSPEC :
+Calling
+.BR connect (2)
+with that address family
+can only dissolve existing associations,
+and as such is always allowed.
+Calling
+.BR bind (2)
+with that address family
+is treated the same way the network stack treats it:
+for IPv4 and
+.B INADDR_ANY
+it is treated as
+.BR AF_INET .
+All other uses of that address family result in the same error codes
+as when Landlock is not in use.
 .\"
 .SS Scope flags
 These flags enable isolating a sandboxed process from a set of IPC actions.
